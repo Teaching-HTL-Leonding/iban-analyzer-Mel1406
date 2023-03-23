@@ -121,17 +121,19 @@ string AnalyzeIBAN(string IBAN)
                            nationDigit,
                            out string errorMessage) ? errorMessage : $"Bank code: {bankCode}\n\rAccount number: {accountNumber}";
 }
-string CalculateChecksum(string bankCode, string accountNumber, string nationDigit, string countryCode, out long checksum)
+string CalculateChecksum(string bankCode, string accountNumber, string nationDigit, string countryCode, out long check)
 {
     int firstLetterDigit = countryCode[0] - 'A' + 10;
     int secondLetterDigit = countryCode[1] - 'A' + 10;
     string countryCodeDigit = firstLetterDigit.ToString() + secondLetterDigit.ToString();
-    checksum = long.Parse(bankCode) % 97;
+    long checksum = long.Parse(bankCode) % 97;
     checksum = (checksum * GetMultiplier(6) + long.Parse(accountNumber)) % 97;
     checksum = (checksum * GetMultiplier(1) + long.Parse(nationDigit)) % 97;
     checksum = (checksum * GetMultiplier(4) + long.Parse(countryCodeDigit)) % 97;
+    check = checksum;
     checksum = checksum * GetMultiplier(2) % 97;
     long returnValue = 98 - checksum;
+    check = (checksum * GetMultiplier(2) + returnValue) % 97;
     return returnValue.ToString();
 }
 long GetMultiplier(int exponent)
