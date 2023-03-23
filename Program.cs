@@ -133,7 +133,7 @@ string CalculateChecksum(string bankCode, string accountNumber, string nationDig
     check = checksum;
     checksum = checksum * GetMultiplier(2) % 97;
     long returnValue = 98 - checksum;
-    check = (checksum * GetMultiplier(2) + returnValue) % 97;
+    check = (check * GetMultiplier(2) + returnValue) % 97;
     return returnValue.ToString();
 }
 long GetMultiplier(int exponent)
